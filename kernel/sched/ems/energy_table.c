@@ -81,7 +81,13 @@ inline unsigned int et_get_cpu_mips(unsigned int cpu)
 
 unsigned int capacity_max_of(unsigned int cpu)
 {
-	struct energy_table *table = &per_cpu(energy_table, cpu);
+	struct energy_table *table;
+
+	/* e.g. cpumask_first() of an empty mask: no per-cpu area to look at */
+	if (cpu >= nr_cpu_ids)
+		return 0;
+
+	table = &per_cpu(energy_table, cpu);
 
 	/* If energy table wasn't initialized, return 0 as capacity */
 	if (!table->states)

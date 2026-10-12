@@ -1120,6 +1120,10 @@ bool fast_path_eligible(struct tp_env *env)
 {	
 	int start_cpu = select_start_cpu(env);
 
+	/* Cond 0: speed masks are empty until the energy table is set up */
+	if (start_cpu >= nr_cpu_ids)
+		return false;
+
 	/* Cond 1: Task should not be under mulligan migration */
 	if (EMS_PF_GET(env->p) & EMS_PF_MULLIGAN)
 		return false;
